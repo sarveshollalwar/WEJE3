@@ -4,9 +4,10 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Properties;
 
-public class JdbcUpdate {
+public class JdbcSelect {
 
 	private static Connection connection;
 	private static FileReader filereader;
@@ -15,6 +16,7 @@ public class JdbcUpdate {
 	private static int result;
 	private static String query;
 	private static PreparedStatement preparedstatement;
+	private static ResultSet resultset;
 	
 	public static void main(String[] args) {
 		try
@@ -26,15 +28,16 @@ public class JdbcUpdate {
 			
 			connection = DriverManager.getConnection(properties.getProperty("dburl"),properties);
 //			Prepare statement
-			query = "update emp set emp_name=? where empid=? ";
+			query = "select * from emp where empid = ? ";
 			preparedstatement = connection.prepareStatement(query);
 			
-			preparedstatement.setString(1, "Himanshu");
-			preparedstatement.setInt(2, 4);
-			result = preparedstatement.executeUpdate();
-			
-			System.out.println("Query ok "+result+" rows affected");
-		
+			preparedstatement.setInt(1, 2);
+			resultset = preparedstatement.executeQuery();
+			while(resultset.next())
+			{
+			System.out.println(resultset.getString(1)+" | "+resultset.getString(2)+" | "+
+			                    resultset.getString(3)+" | "+resultset.getString(4));
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -53,13 +56,15 @@ public class JdbcUpdate {
 				{
 					preparedstatement.close();
 				}
+				if(resultset!=null)
+				{
+					resultset.close();
+				}
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
-		}
 	}
-	
-
+	}
 }

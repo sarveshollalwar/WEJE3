@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Properties;
 
-public class JdbcUpdate {
+public class JdbcDelete {
 
 	private static Connection connection;
 	private static FileReader filereader;
@@ -26,11 +26,10 @@ public class JdbcUpdate {
 			
 			connection = DriverManager.getConnection(properties.getProperty("dburl"),properties);
 //			Prepare statement
-			query = "update emp set emp_name=? where empid=? ";
+			query = "delete from emp where empid = ? ";
 			preparedstatement = connection.prepareStatement(query);
 			
-			preparedstatement.setString(1, "Himanshu");
-			preparedstatement.setInt(2, 4);
+			preparedstatement.setInt(1, 4);
 			result = preparedstatement.executeUpdate();
 			
 			System.out.println("Query ok "+result+" rows affected");
@@ -58,8 +57,6 @@ public class JdbcUpdate {
 			{
 				e.printStackTrace();
 			}
-		}
 	}
-	
-
+}
 }
